@@ -17,19 +17,6 @@ const PokemonList = () => {
       );
   }, [posts]);
 
-  const Header = styled.div`
-    display: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 70px;
-    background-color: red;
-    color: white;
-    line-height: 70px;
-    padding-left: 50px;
-    font-size: 48px;
-  `;
-
   const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +38,6 @@ const PokemonList = () => {
 
   return (
     <>
-      <Header>Pokedex</Header>
       <Container>
         {pokemon.map((pokemon) => (
           <PokemonCard
@@ -69,9 +55,9 @@ const PokemonList = () => {
             }
           }}
         >
-          before
+          ←
         </Button>
-        <Button onClick={() => setPosts(posts + 20)}>next</Button>
+        <Button onClick={() => setPosts(posts + 20)}>→</Button>
       </ButtonWrapper>
     </>
   );
