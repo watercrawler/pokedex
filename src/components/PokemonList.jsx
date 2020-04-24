@@ -3,19 +3,33 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 import PokemonCard from './PokemonCard';
+import Pagination from './Pagination';
 
 const PokemonList = () => {
   const [posts, setPosts] = useState(0);
   const [pokemon, setPokemon] = useState([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageBlock, setPageBlock] = useState(0);
+  const POSTS_PER_PAGE = 20;
+  const TOTAL_POSTS = 980;
   useEffect(() => {
     axios
-      .get(`https://pokeapi.co/api/v2/pokemon/?limit=20&offset=${posts}`)
+      .get(
+        `https://pokeapi.co/api/v2/pokemon/?limit=${POSTS_PER_PAGE}&offset=${posts}`
+      )
       .then(
         (response) => setPokemon(response.data['results'])
         // console.log(response.data['results'])
       );
   }, [posts]);
+
+  const indexOfLastPost = currentPage * POSTS_PER_PAGE;
+  const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
+  const currentPokemon = pokemon.slice(indexOfFirstPost, indexOfLastPost);
+
+  function paginate(pageNumber) {
+    setPosts(POSTS_PER_PAGE * (pageNumber - 1));
+  }
 
   const Container = styled.div`
     display: flex;
@@ -29,17 +43,18 @@ const PokemonList = () => {
 
   const ButtonWrapper = styled.div`
     text-align: center;
+    margin-left: -40px;
   `;
   const Button = styled.button`
     width: 100px;
     height: 50px;
-    margin-right: 40px;
+    margin-left: 10px;
   `;
 
   return (
     <>
       <Container>
-        {pokemon.map((pokemon) => (
+        {currentPokemon.map((pokemon) => (
           <PokemonCard
             key={pokemon.name}
             name={pokemon.name}
@@ -50,17 +65,34 @@ const PokemonList = () => {
       <ButtonWrapper>
         <Button
           onClick={() => {
-            if (posts !== 0) {
-              setPosts(posts - 20);
+            if (pageBlock !== 0) {
+              setPageBlock(pageBlock - 10);
+              setPosts((pageBlock - 1) * POSTS_PER_PAGE);
             }
           }}
         >
           ←
         </Button>
-        <Button onClick={() => setPosts(posts + 20)}>→</Button>
+        <Pagination
+          postsPerPage={POSTS_PER_PAGE}
+          totalPosts={TOTAL_POSTS}
+          paginate={paginate}
+          currentPage={currentPage}
+          pageBlock={pageBlock}
+        />
+        <Button
+          onClick={() => {
+            if (pageBlock < 40) {
+              setPageBlock(pageBlock + 10);
+              setPosts((pageBlock + 10) * POSTS_PER_PAGE);
+            }
+          }}
+        >
+          →
+        </Button>
       </ButtonWrapper>
     </>
   );
 };
 
-export default PokemonList;
+export default React.memo(PokemonList);

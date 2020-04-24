@@ -3,6 +3,7 @@ import PokemonList from './components/PokemonList';
 import Pokemon from './components/Pokemon';
 import styled from 'styled-components';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import './App.css';
 
 const Header = styled.div`
   display: fixed;
