@@ -1,6 +1,6 @@
 import React from 'react';
-import PokemonList from './components/PokemonList';
-import Pokemon from './components/Pokemon';
+import PokemonList from './pages/PokemonList';
+import Pokemon from './pages/Pokemon';
 import styled from 'styled-components';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
@@ -22,7 +22,9 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Header>Pokedex</Header>
+        <Header>
+          <a href="/">Pokedex</a>
+        </Header>
         <div>
           <Switch>
             <Route exact path="/" component={PokemonList} />

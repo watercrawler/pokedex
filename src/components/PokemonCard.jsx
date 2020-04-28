@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Card = styled.div`
   box-sizing: border-box;
@@ -34,6 +35,7 @@ const StyledLink = styled(Link)`
 `;
 
 const PokemonImg = styled.img`
+  margin-top: 10px;
   height: 130px;
   width: 130px;
 `;
@@ -52,17 +54,27 @@ const Index = styled.div`
 
 const Name = styled.div`
   margin-top: 5px;
+  color: black;
 `;
 
 const PokemonCard = ({ name, url }) => {
   const pokemonIndex = url.split('/')[url.split('/').length - 2];
+  const [korName, setKorName] = useState(null);
+  useEffect(() => {
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemonIndex}`)
+      .then((response) => setKorName(response.data.names[8].name));
+  }, [pokemonIndex]);
 
   return (
     <Card>
-      <StyledLink to={`pokemon/${pokemonIndex}`}>
+      <StyledLink
+        to={`pokemon/${pokemonIndex}`}
+        style={{ textDecoration: 'none' }}
+      >
         <Index>{pokemonIndex}</Index>
         <PokemonImg src={`https://img.pokemondb.net/artwork/${name}.jpg`} />
-        <Name>{name}</Name>
+        <Name>{korName}</Name>
       </StyledLink>
     </Card>
   );
